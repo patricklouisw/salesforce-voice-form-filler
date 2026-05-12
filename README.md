@@ -22,9 +22,22 @@ LWC → omniApplyCallResp → OmniScript data
 - **[voiceFormFiller](force-app/main/default/lwc/voiceFormFiller/README.md)** — single-utterance variant. One click, one sentence, transcript shown, user confirms, fields filled. Web Speech API runs with `continuous=false`. Use when each OmniScript step has only one or two fields and you want a tight "speak → confirm" loop.
 - **[voiceFormFillerV2](force-app/main/default/lwc/voiceFormFillerV2/README.md)** — continuous-dictation variant. `continuous=true` and `interimResults=true` so the user can talk through several fields in one take with natural pauses and see interim text update live. Auto-stops after `autoStopSeconds` (default 30s). Use when one step needs many fields filled from a longer monologue.
 
-Both LWCs share the same Apex contract, OmniScript apply via `OmniscriptBaseMixin.omniApplyCallResp`, state machine (`IDLE` → `LISTENING` → `TRANSCRIBED` → `PROCESSING` → `DONE` / `ERROR`), browser-support gating (Chrome/Edge desktop; iOS Safari excluded), and Experience Cloud fallback that recursively searches `omniJsonData` for `fieldConfig` / `promptDeveloperName` when custom attributes are dropped by the runtime.
+Both LWCs share the same Apex contract, OmniScript apply via `OmniscriptBaseMixin.omniApplyCallResp`, state machine (`IDLE` → `LISTENING` → `TRANSCRIBED` → `PROCESSING` → `DONE` / `ERROR`), browser-support gating (see table below), and Experience Cloud fallback that recursively searches `omniJsonData` for `fieldConfig` / `promptDeveloperName` when custom attributes are dropped by the runtime.
 
 The full public customAttributes table (including `fieldConfig`, `promptDeveloperName`, `languages`, `unsupportedBehavior`, `debug`, and V2's `autoStopSeconds`) plus short-form and rich-form `fieldConfig` examples live in each component's README.
+
+### Browser support
+
+Both LWCs use the Web Speech API (`SpeechRecognition` / `webkitSpeechRecognition`).
+
+| Browser | Supported | Notes |
+| --- | --- | --- |
+| Desktop Chrome | ✅ | Primary target. |
+| Desktop Edge | ✅ | Primary target. |
+| Desktop Safari | ✅ | Uses the `webkit` prefix. Implementation has historically been flaky. |
+| Android Chrome | ✅ | |
+| iOS Safari / iOS Chrome | ❌ | Explicitly excluded — `detectBrowserSupport()` detects iOS via UA and returns `false` even though the API technically exists. The component hides itself or shows a hint, controlled by `unsupportedBehavior`. |
+| Firefox | ❌ | Does not implement `SpeechRecognition`. |
 
 ### Apex
 

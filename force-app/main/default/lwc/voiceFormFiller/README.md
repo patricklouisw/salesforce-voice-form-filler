@@ -14,7 +14,16 @@ Primary intended use is as a Custom LWC step inside an OmniScript.
 
 ## Browser support
 
-Uses the Web Speech API (`SpeechRecognition` / `webkitSpeechRecognition`). Works in Chrome and Edge on desktop. iOS Safari is explicitly excluded — `detectBrowserSupport()` returns `false` so the component either hides itself or shows a hint, controlled by `unsupportedBehavior`.
+Uses the Web Speech API (`SpeechRecognition` / `webkitSpeechRecognition`).
+
+| Browser | Supported | Notes |
+| --- | --- | --- |
+| Desktop Chrome | ✅ | Primary target. |
+| Desktop Edge | ✅ | Primary target. |
+| Desktop Safari | ✅ | Uses the `webkit` prefix. Implementation has historically been flaky. |
+| Android Chrome | ✅ | |
+| iOS Safari / iOS Chrome | ❌ | Explicitly excluded — `detectBrowserSupport()` detects iOS via UA and returns `false` even though the API technically exists. The component hides itself or shows a hint, controlled by `unsupportedBehavior`. |
+| Firefox | ❌ | Does not implement `SpeechRecognition`. |
 
 ## Public API (customAttributes)
 

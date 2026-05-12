@@ -18,6 +18,19 @@ Use V2 when one OmniScript step needs many fields filled from a longer monologue
 
 Everything else — Apex call shape, OmniScript apply, state machine, browser-support gating, fallback resolution from `omniJsonData` — matches V1.
 
+## Browser support
+
+Uses the Web Speech API (`SpeechRecognition` / `webkitSpeechRecognition`).
+
+| Browser | Supported | Notes |
+| --- | --- | --- |
+| Desktop Chrome | ✅ | Primary target. |
+| Desktop Edge | ✅ | Primary target. |
+| Desktop Safari | ✅ | Uses the `webkit` prefix. Implementation has historically been flaky. |
+| Android Chrome | ✅ | |
+| iOS Safari / iOS Chrome | ❌ | Explicitly excluded — `detectBrowserSupport()` detects iOS via UA and returns `false` even though the API technically exists. The component hides itself or shows a hint, controlled by `unsupportedBehavior`. |
+| Firefox | ❌ | Does not implement `SpeechRecognition`. |
+
 ## Public API (customAttributes)
 
 Same as V1 plus `autoStopSeconds`:
