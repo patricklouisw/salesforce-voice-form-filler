@@ -1,0 +1,150 @@
+<!--
+  @description       :
+  @author            : Cloud SynApps Inc.
+  @last modified on  : 2026-05-07
+  @last modified by  : Nicolas Stalteri
+-->
+<template>
+    <template lwc:if={isBrowserSupported}>
+    <div class="slds-box slds-theme_default voice-filler">
+
+        <template lwc:if={hasMultipleLanguages}>
+            <div class="language-picker slds-m-bottom_x-small">
+                <lightning-combobox
+                    label="Language"
+                    variant="label-hidden"
+                    value={selectedLang}
+                    options={comboboxOptions}
+                    onchange={handleLanguageChange}
+                    disabled={isLanguagePickerDisabled}>
+                </lightning-combobox>
+            </div>
+        </template>
+
+        <div class="slds-grid slds-grid_vertical-align-center slds-gutters_x-small">
+            <div class="slds-col slds-no-flex">
+                <template lwc:if={isIdle}>
+                    <button
+                        class="slds-button slds-button_brand mic-button"
+                        onclick={handleStartListening}
+                        title="Start recording">
+                        <lightning-icon
+                            icon-name="utility:unmuted"
+                            alternative-text="Start"
+                            size="small"
+                            variant="inverse">
+                        </lightning-icon>
+                    </button>
+                </template>
+                <template lwc:elseif={isListening}>
+                    <button
+                        class="slds-button slds-button_destructive mic-button mic-recording"
+                        onclick={handleStopListening}
+                        title="Stop recording">
+                        <lightning-icon
+                            icon-name="utility:stop"
+                            alternative-text="Stop"
+                            size="small"
+                            variant="inverse">
+                        </lightning-icon>
+                    </button>
+                </template>
+                <template lwc:else>
+                    <button
+                        class="slds-button slds-button_neutral mic-button"
+                        onclick={handleRetry}
+                        title="Record again">
+                        <lightning-icon
+                            icon-name="utility:refresh"
+                            alternative-text="Retry"
+                            size="small">
+                        </lightning-icon>
+                    </button>
+                </template>
+            </div>
+
+            <div class="slds-col">
+                <template lwc:if={isIdle}>
+                    <span class="slds-text-body_small slds-text-color_weak">
+                        Click the microphone and speak to fill the form
+                    </span>
+                </template>
+                <template lwc:elseif={isListening}>
+                    <span class="slds-text-body_small recording-label">
+                        Listening click stop when you're done
+                    </span>
+                </template>
+                <template lwc:elseif={isTranscribed}>
+                    <div>
+                        <div class="slds-text-body_small slds-text-color_weak">I heard:</div>
+                        <div class="slds-text-body_regular transcript-text">"{transcript}"</div>
+                    </div>
+                </template>
+                <template lwc:elseif={isProcessing}>
+                    <span class="slds-text-body_small slds-grid slds-grid_vertical-align-center">
+                        <lightning-spinner
+                            alternative-text="Processing"
+                            size="x-small"
+                            variant="brand"
+                            class="slds-m-right_x-small">
+                        </lightning-spinner>
+                        Extracting values&hellip;
+                    </span>
+                </template>
+                <template lwc:elseif={isDone}>
+                    <span class="slds-text-body_small slds-text-color_success">
+                        &#10003; Form prefilled. Review the values below before continuing.
+                    </span>
+                </template>
+                <template lwc:elseif={isError}>
+                    <span class="slds-text-body_small slds-text-color_destructive">
+                        {errorMessage}
+                    </span>
+                </template>
+            </div>
+        </div>
+
+        <template lwc:if={isTranscribed}>
+            <div class="slds-m-top_small">
+                <button
+                    class="slds-button slds-button_brand"
+                    onclick={handleConfirmTranscript}>
+                    Use this &amp; fill form
+                </button>
+                <button
+                    class="slds-button slds-button_neutral slds-m-left_x-small"
+                    onclick={handleRetry}>
+                    Try again
+                </button>
+            </div>
+        </template>
+
+        <template lwc:if={isDone}>
+            <div class="slds-m-top_x-small slds-text-body_small slds-text-color_weak slds-grid slds-grid_vertical-align-center">
+                <lightning-icon
+                    icon-name="utility:info_alt"
+                    size="xx-small"
+                    class="slds-m-right_xx-small">
+                </lightning-icon>
+                <span>AI transcription may be inaccurate. Please review the prefilled values before submitting.</span>
+            </div>
+            <template lwc:if={showFilledSummary}>
+                <div class="slds-m-top_x-small slds-text-body_small slds-text-color_weak">
+                    Filled: {filledSummary}
+                </div>
+            </template>
+        </template>
+    </div>
+    </template>
+
+    <template lwc:elseif={showHint}>
+        <div class="slds-text-body_small slds-text-color_weak slds-p-around_x-small unsupported-hint">
+            <lightning-icon
+                icon-name="utility:info"
+                size="xx-small"
+                class="slds-m-right_xx-small">
+            </lightning-icon>
+            Voice fill is available in Chrome or Edge.
+        </div>
+    </template>
+</template>

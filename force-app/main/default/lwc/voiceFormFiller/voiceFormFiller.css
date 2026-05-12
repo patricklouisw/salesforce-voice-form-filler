@@ -1,0 +1,46 @@
+.voice-filler {
+    background: #f7f9fb;
+    border: 1px solid #e5e9ee;
+}
+
+.language-picker {
+    max-width: 14rem;
+}
+
+.mic-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mic-recording {
+    animation: mic-pulse 1.2s infinite;
+}
+
+.recording-label {
+    color: #c23934;
+    font-weight: 600;
+}
+
+.transcript-text {
+    font-style: italic;
+    color: #2e2e2e;
+}
+
+@keyframes mic-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(194, 57, 52, 0.55); }
+    70%  { box-shadow: 0 0 0 12px rgba(194, 57, 52, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(194, 57, 52, 0); }
+}
+
+.unsupported-hint {
+    display: inline-flex;
+    align-items: center;
+    background: #f7f9fb;
+    border: 1px dashed #d8dde6;
+    border-radius: 0.25rem;
+}
